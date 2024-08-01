@@ -1,0 +1,338 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  background-color: #ffffff;
+  color: #fff;
+}
+.sidebar {
+  overflow: auto;
+  color: rgb(119, 119, 119);
+  background: linear-gradient(
+    rgb(249, 248, 247),
+    rgb(251, 250, 248) 46px,
+    rgb(251, 251, 249) 120px,
+    rgb(248, 247, 245) 35%,
+    rgb(249, 248, 246)
+  );
+  display: flex;
+  flex-direction: column;
+  padding: 16px 8px 0 16px;
+}
+
+.sidebar__highlights {
+  list-style: "none";
+  padding: 0;
+}
+
+.highlight__location {
+  margin-top: 0.5rem;
+  text-align: right;
+  font-size: 14px;
+}
+
+.highlight__image {
+  overflow: auto;
+  max-width: 300px;
+  border: 1px dashed;
+}
+
+.sidebar__highlight {
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 140ms ease-in;
+  border-bottom: 1px solid rgb(119, 119, 119);
+}
+
+.sidebar__highlight:hover {
+  background: rgba(58, 56, 52, 0.08);
+}
+
+a {
+  color: #d35400;
+}
+
+blockquote {
+  padding: 0;
+  margin: 0;
+  quotes: "\201c" "\201d";
+}
+blockquote:before {
+  content: open-quote;
+}
+blockquote:after {
+  content: close-quote;
+}
+
+.styleContainer {    
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  /* border: 5px solid #e1dddd; */
+  /* box-shadow: inset 1px 1px #e1dddd; */
+  /* border-radius: 10px; */
+  height: 90vh;
+  width: 100%;
+  position: relative;
+  background-color: #f4f4f4 !important;
+  /* padding: 10px */
+}
+.NotesPanel {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 8px 0 16px;
+  >.header {
+    padding-right: 18px;
+    >.input-container {
+      display: flex;
+      position: relative;
+      flex: 1;
+      >input {
+        width: 100%;
+        border: 1px solid #cfd4da;
+        border-radius: 4px;
+        color: #485056;
+        padding: 4px 8px 6px;
+      }
+    };
+    >.comments-counter {
+      height: 19px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      color: #485056;
+      span {
+        font-weight: 700;
+      }
+    }
+  }
+  >.normal-notes-container {
+    /* overflow: overlay; */
+    margin-top: 10px;
+    /* flex: 1; */
+    padding-right: 18px;
+    >.note-wrapper {
+      >.ListSeparator {
+        margin-bottom: 8px;
+        font-family: Lato;
+        font-weight: 500;
+        color: #868e96;
+      }
+    }
+  }
+}
+
+.Note {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  display: block;
+  text-align: left;
+  border-radius: 4px;
+  box-shadow: 0 0 3px 0 #868e96;
+  margin-bottom: 8px;
+  margin-left: 2px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.NoteContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  flex: 1;
+  color: #485056;
+  padding-bottom: 12px;
+}
+
+.parent {
+  padding-left: 52px;
+}
+
+
+
+.NoteHeader {
+  padding-right: 12px;
+  position: relative;
+  flex: 1;
+  color: #485056;
+  .date-and-time {
+    opacity: 0.8;
+    font-size: 10px;
+    color: #868e96;
+  };
+  .author-and-date {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    padding-top: 12px;
+  };
+  .author-and-overflow {
+    display: flex;
+    justify-content: space-between;
+  };
+  .author-and-time {
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+  };
+  .author {
+    font-weight: 700;
+  };
+  .date-and-num-replies {
+    display: flex;
+  };
+  .state-and-overflow {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+  };
+}
+
+.NoteHeader .type-icon-container {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 28px;
+  height: 28px;
+  border-width: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.resize-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: col-resize;
+  width: 14px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #cfd4da;
+  border-left: 1px solid #cfd4da;
+  z-index: 65;
+}
+
+.HeaderToolsContainer {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  z-index: 70;
+  height: 40px;
+  background: #e7ebee;
+}
+
+.Tools {
+  background: #e7ebee;
+  height: 40px;
+}
+
+.NotePopup {
+  flex-grow: 0;
+  justify-content: flex-end;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  right: -10px;
+  top: -8px;
+}
+
+.NotePopup, .NotePopup .overflow {
+  display: flex;
+  width: 28px;
+  height: 28px;
+}
+
+.NotePopup .overflow {
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.NotePopup .overflow:active {
+  background: #dde6ee;
+}
+
+.NotePopup .options {
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 3px 0 #adb5bd;
+  z-index: 80;
+  position: absolute;
+  border-radius: 4px;
+  background: #fff;
+  top: 40px;
+}
+
+.NotePopup .options .note-popup-option {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+.NotePopup .options .option {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 28px;
+  padding-left: 8px;
+  padding-right: 17px;
+  border-radius: 0;
+}
+
+.NotePopup .options .option:first-child {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+html:not([data-tabbing=true]) .NotePopup .options .note-popup-option {
+  outline: none;
+}
+
+.NoteContent .container {
+  padding-left: 52px;
+  padding-right: 12px;
+}
+
+.NoteContent .container, .NoteContent .container-reply {
+  margin-top: 8px;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+
+.note-text-preview {
+  font-size: 13px;
+  color: #868e96;
+  padding-right: 12px;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  cursor: text;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.preview-comment {
+  color: #485056;
+}
+
+.circle{
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: #f8f9fa;
+  border: 1px solid #cfd4da;
+}
+
