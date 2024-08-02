@@ -83,8 +83,8 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                         ...prevHighlights,
                         ...highlightedWords.map((word) => ({ ...word, pageNumber })),
                     ];
-                     localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights)); // off code dòng này highlight vẫn tạo ra gạch ngang văn bản
-                     return newHighlights;
+                    localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights));
+                    return newHighlights;
                 });
 
                 setHighlightsByPage((prev) => ({ ...prev, [pageNumber]: highlightedWords }));
@@ -141,6 +141,7 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                 </Layer>
             </Stage>}
         </>
+
     );
 };
 
