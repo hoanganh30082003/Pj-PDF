@@ -142,6 +142,7 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
             </Stage>}
         </>
 
+
     );
 };
 

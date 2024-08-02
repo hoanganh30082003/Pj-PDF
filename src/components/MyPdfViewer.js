@@ -10,6 +10,7 @@ import RenderTextHighlight from './RenderTextHighlight';
 import RenderUnderlineTexts from './RenderUnderlineTexts';
 import RenderStrikeTexts from './RenderStrikeTexts';
 
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const MyPdfViewer = () => {
@@ -110,6 +111,7 @@ const MyPdfViewer = () => {
                                             <RenderTextHighlight pageNumber={pageNumber} words={words[pageNumber]} pageSize={pageSizes} />
                                             <RenderUnderlineTexts pageNumber={pageNumber} pageSize={pageSizes} words={words[pageNumber]} />
                                             <RenderStrikeTexts pageNumber={pageNumber} pageSize={pageSizes} words={words[pageNumber]} />
+
                                         </>
                                     )}
                                 </div>

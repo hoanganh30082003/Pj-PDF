@@ -32,6 +32,7 @@ const PdfViewerProvider = ({ children }) => {
             }}
         >
         {children}
+
         </PdfViewerContext.Provider>
     );
 };
