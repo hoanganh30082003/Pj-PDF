@@ -7,7 +7,7 @@ import RenderCircles from './RenderCircles';
 import HighlightLayer from './RenderAreaHighlights';
 import * as pdfjsLib from 'pdfjs-dist'; // Import pdfjsLib
 import RenderTextHighlight from './RenderTextHighlight';
-import RenderStrikeThroughText from './RenderStrikeThroughText'; // thêm vào 2/8 để tạo nút Gạch ngang văn bản
+import RenderStrikeThroughText from './RenderStrikeThroughText'; // thêm vào 2/8 để tạo nút Gạch ngang văn bản ở homepage
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const MyPdfViewer = () => {
