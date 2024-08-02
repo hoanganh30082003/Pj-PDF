@@ -123,7 +123,7 @@ const RenderUnderlineTexts = ({ pageNumber, words, pageSize }) => {
                             y={word.y + 1}
                             width={word.width}
                             height={0.5}
-                            fill="yellow"
+                            fill="black"
 
                             onClick={() => handleWordClick(word)}
                         />
