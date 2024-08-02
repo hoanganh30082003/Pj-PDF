@@ -7,8 +7,10 @@ const PdfViewerProvider = ({ children }) => {
     const [circlesByPage, setCirclesByPage] = useState({});
     const [highlightsByPage, setHighlightsByPage] = useState({});
     const [isHighlighting, setIsHighlighting] = useState(false);
+    const [isLineText, setIsLineText] = useState(false);
+    const [linesByPage, setLinesByPage] = useState({});
     return (
-        <PdfViewerContext.Provider value={{ numPages, setNumPages, isEditing, setIsEditing, circlesByPage, setCirclesByPage,highlightsByPage, setHighlightsByPage, isHighlighting, setIsHighlighting }}>
+        <PdfViewerContext.Provider value={{ numPages, setNumPages, isEditing, setIsEditing, circlesByPage, setCirclesByPage,highlightsByPage, setHighlightsByPage, isHighlighting, setIsHighlighting, isLineText, setIsLineText, linesByPage, setLinesByPage }}>
             {children}
         </PdfViewerContext.Provider>
     );

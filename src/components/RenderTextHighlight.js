@@ -120,11 +120,11 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                     <Rect
                         key={i}
                         x={word.x}
-                        y={word.y}
+                        y={word.y+2} // chỉnh gạch chân chọn y+2, gạch ngang chọn y-2
                         width={word.width}
-                        height={word.height}
+                        height={0} 
                         stroke="blue"
-                        strokeWidth={2}
+                        strokeWidth={0.5}
                         fill="transparent"
                         onClick={() => handleWordClick(word)}
                     />

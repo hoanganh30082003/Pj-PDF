@@ -7,12 +7,13 @@ import RenderCircles from './RenderCircles';
 import HighlightLayer from './RenderAreaHighlights';
 import * as pdfjsLib from 'pdfjs-dist'; // Import pdfjsLib
 import RenderTextHighlight from './RenderTextHighlight';
+import RenderLineText from './RenderLineText';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const MyPdfViewer = () => {
     const [pdfLoaded, setPdfLoaded] = useState(false);
     const pdfUrl = './WebviewerDemoDoc.pdf';
-    const { numPages, setNumPages, isEditing, setIsEditing, setCirclesByPage, highlightsByPage, setHighlightsByPage, isHighlighting, setIsHighlighting } = useContext(PdfViewerContext);
+    const { numPages, setNumPages, isEditing, setIsEditing, setCirclesByPage, highlightsByPage, setHighlightsByPage, isHighlighting, setIsHighlighting, isLineText, setIsLineText } = useContext(PdfViewerContext);
     const [pageSizes, setPageSizes] = useState({});
     const [words, setWords] = useState({});
     console.log(words);
@@ -60,7 +61,10 @@ const MyPdfViewer = () => {
                 <button onClick={() => setIsEditing(!isEditing)}>
                     {isEditing ? 'Tắt chế độ tròn' : 'Bật chế độ tròn'}
                 </button>
-                <button onClick={() => setIsHighlighting(!isHighlighting)}>{isHighlighting ? 'Tắt chế độ highlight' : 'Bật chế độ highlight'}</button>
+                <button onClick={() => setIsHighlighting(!isHighlighting)}>{isHighlighting ? 'Tắt chế độ underline' : 'Bật chế độ underline'}</button>
+                <button onClick={() => setIsLineText(!isLineText)}>
+                    {isLineText ? 'Tắt chế độ linetext' : 'Bật chế độ linetext'}
+                </button>
             </div>
             <div
                 style={{
@@ -90,6 +94,7 @@ const MyPdfViewer = () => {
                                             <RenderCircles pageNumber={pageNumber} pageSize={pageSizes} />
                                             <HighlightLayer pageNumber={pageNumber} pageSize={pageSizes} />
                                             <RenderTextHighlight pageNumber={pageNumber} words={words[pageNumber]} pageSize={pageSizes} />
+                                            {/* <RenderLineText pageNumber={pageNumber} pageSize={pageSizes} /> */}
                                         </>
                                     )}
                                 </div>
