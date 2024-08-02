@@ -2,15 +2,13 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Stage, Layer, Circle, Transformer } from 'react-konva';
 import { PdfViewerContext } from './PdfViewerContext';
 
-const RenderCircles = ({ pageNumber, pageSize }) => {
+const RenderCircles = ({ pageNumber }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [selectedCircleId, setSelectedCircleId] = useState(null);
     const stageRefs = useRef({});
     const transformerRefs = useRef([]);
     let transformer = useRef();
     const { isEditing, circlesByPage, setCirclesByPage } = useContext(PdfViewerContext);
-    const { width, height } = pageSize;
-
     useEffect(() => {
         if (selectedCircleId && isEditing) {
             const pageNumber = parseInt(selectedCircleId.split('-')[0]);
@@ -40,7 +38,7 @@ const RenderCircles = ({ pageNumber, pageSize }) => {
                 ? [...prevCircles[pageNumber], { id: String(Math.random()).slice(2), x, y, radius }]
                 : [{ id: String(Math.random()).slice(2), x, y, radius }]
         }));
-
+        
     }
 
     function handleMouseDown(pageNumber, e) {
@@ -61,8 +59,8 @@ const RenderCircles = ({ pageNumber, pageSize }) => {
         <Stage
             id={`stage_${pageNumber}`}
             ref={(node) => (stageRefs.current[pageNumber] = node)}
-            width={width}
-            height={height}
+            width={600}
+            height={800}
             onMouseDown={(e) => handleMouseDown(pageNumber, e)}
             style={{ position: 'absolute', top: 0, left: 0, zIndex: isEditing ? 10 : 0 }}
             isEditing={isEditing}

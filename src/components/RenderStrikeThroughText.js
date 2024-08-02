@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react'; // mới thêm useContext 2/8
 import { Stage, Layer, Rect } from 'react-konva';
-
-const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
+import { PdfViewerContext } from './PdfViewerContext'; // mới thêm 2/8 để xử lý chức năng nút tăt/bật gạch ngang văn bản ở homepage
+const RenderStrikeThroughText = ({ pageNumber, words, pageSize }) => { 
     const [highlightsByPage, setHighlightsByPage] = useState({});
     const [isDragging, setIsDragging] = useState(false);
     const [selectedHighlightId, setSelectedHighlightId] = useState(null);
@@ -9,6 +9,7 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
     const [highlights, setHighlights] = useState([]);
     const { width, height } = pageSize;
     const stageRefs = useRef({});
+    const {isStrike, setIsStrike} = useContext(PdfViewerContext); // mới thêm 2/8 để thêm nút tăt/bật gạch ngang văn bản ở homepage
 
     useEffect(() => {
         const storedHighlights = localStorage.getItem(`highlights_${pageNumber}`);
@@ -34,7 +35,7 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
     }
 
     function handleMouseDown(pageNumber, e) {
-        if (e.target === e.target.getStage()) {
+        if ((e.target === e.target.getStage()) && (isStrike)) { // mới thêm && (isStrike)) xử lý chức năng nút tăt/bật gạch ngang văn bản ở homepage
             const stage = e.target.getStage();
             const pointerPosition = stage.getPointerPosition();
             setNewHighlight({
@@ -85,8 +86,8 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                         ...prevHighlights,
                         ...highlightedWords.map((word) => ({ ...word, pageNumber })),
                     ];
-                     localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights)); // off code dòng này highlight vẫn tạo ra gạch ngang văn bản
-                     return newHighlights;
+                    localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights));
+                    return newHighlights;
                 });
 
                 setHighlightsByPage((prev) => ({ ...prev, [pageNumber]: highlightedWords }));
@@ -120,12 +121,12 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                     <Rect
                         key={i}
                         x={word.x}
-                        y={word.y} 
+                        y={word.y - (word.height)/3 + 1} // đặt /3, gạch ngang văn bản sẽ ở giữa text
                         width={word.width}
-                        height={word.height} // đã thay đổi sáng 2/8 so với 1/8
-                        stroke="blue" // off dòng này ko thay đổi chức năng highlight tạo ra gạch ngang văn bản
-                        strokeWidth={0.5} // off dòng này ko thay đổi chức năng highlight tạo ra gạch ngang văn bản
-                        fill="transparent" // off dòng này ko thay đổi chức năng highlight tạo ra gạch ngang văn bản
+                        height={0}
+                        stroke="blue"
+                        strokeWidth={0.5}
+                        fill="transparent"
                         onClick={() => handleWordClick(word)}
                     />
                 ))}
@@ -136,8 +137,8 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                         width={Math.abs(newHighlight.endX - newHighlight.startX)}
                         height={Math.abs(newHighlight.endY - newHighlight.startY)}
                         stroke="red"
-                        strokeWidth={1} // off dòng này ko thay đổi chức năng highlight tạo ra gạch ngang văn bản
-                        fill="rgba(255,0,0,0.5)" // off dòng này ko thay đổi chức năng highlight tạo ra gạch ngang văn bản
+                        strokeWidth={1}
+                        fill="rgba(255,0,0,0.5)"
                     />
                 )}
             </Layer>
@@ -145,4 +146,4 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
     );
 };
 
-export default RenderTextHighlight;
+export default RenderStrikeThroughText; 
