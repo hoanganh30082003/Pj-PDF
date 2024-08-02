@@ -8,14 +8,13 @@ const HighlightLayer = ({ pageNumber, pageSize }) => {
     const [newHighlight, setNewHighlight] = useState(null);
     const stageRefs = useRef({});
     const transformerRefs = useRef([]);
-    const transformer = useRef();
-    const { isHighlighting, highlightsByPage, setHighlightsByPage } = useContext(
+    const { isHighlightArea, highlightsByPage, setHighlightsByPage } = useContext(
         PdfViewerContext
     );
     const { width, height } = pageSize;
 
     useEffect(() => {
-        if (selectedHighlightId && isHighlighting) {
+        if (selectedHighlightId && isHighlightArea) {
             const pageNumber = parseInt(selectedHighlightId.split('-')[0]);
             const stage = stageRefs.current[pageNumber];
             const shape = stage.findOne(`#${selectedHighlightId}`);
@@ -34,7 +33,7 @@ const HighlightLayer = ({ pageNumber, pageSize }) => {
                 }
             });
         }
-    }, [selectedHighlightId, isHighlighting]);
+    }, [selectedHighlightId, isHighlightArea]);
 
     function addHighlight(pageNumber, x, y, width = 100, height = 50) {
         setHighlightsByPage((prevHighlights) => ({
@@ -49,7 +48,7 @@ const HighlightLayer = ({ pageNumber, pageSize }) => {
     }
 
     function handleMouseDown(pageNumber, e) {
-        if (e.target === e.target.getStage() && isHighlighting) {
+        if (e.target === e.target.getStage() && isHighlightArea) {
             const stage = e.target.getStage();
             const pointerPosition = stage.getPointerPosition();
             setNewHighlight({
@@ -92,53 +91,54 @@ const HighlightLayer = ({ pageNumber, pageSize }) => {
     }
 
     return (
-        <Stage
-            id={`stage_${pageNumber}`}
-            ref={(node) => (stageRefs.current[pageNumber] = node)}
-            width={width}
-            height={height}
-            onMouseDown={(e) => handleMouseDown(pageNumber, e)}
-            onMouseMove={(e) => handleMouseMove(pageNumber, e)}
-            onMouseUp={(e) => handleMouseUp(pageNumber, e)}
-            style={{ position: 'absolute', top: 0, left: 0, zIndex: isHighlighting ? 10 : 0 }}
-            isHighlighting={isHighlighting}
-        >
-            <Layer>
-                {highlightsByPage[pageNumber]?.map((highlight, i) => (
-                    <Rect
-                        key={`${pageNumber}-${i}`}
-                        id={`${pageNumber}-${i}`}
-                        x={highlight.x}
-                        y={highlight.y}
-                        width={highlight.width}
-                        height={highlight.height}
-                        stroke="black"
-                        strokeWidth={0.5}
-                        fill="yellow"
-                        opacity={0.4}
-                        draggable={isHighlighting}
-                        onClick={handleHighlightClick}
-                        onDragStart={() => setIsDragging(true)} // Bắt đầu kéo
-                        onDragEnd={() => setIsDragging(false)} // Kết thúc kéo
-                    />
-                ))}
-            </Layer>
-
-            {selectedHighlightId && (
+        <>
+            {isHighlightArea && <Stage
+                id={`stage_${pageNumber}`}
+                ref={(node) => (stageRefs.current[pageNumber] = node)}
+                width={width}
+                height={height}
+                onMouseDown={(e) => handleMouseDown(pageNumber, e)}
+                onMouseMove={(e) => handleMouseMove(pageNumber, e)}
+                onMouseUp={(e) => handleMouseUp(pageNumber, e)}
+                style={{ position: 'absolute', top: 0, left: 0, zIndex: isHighlightArea ? 10 : 0 }}
+                isHighlightArea={isHighlightArea}
+            >
                 <Layer>
-                    <Transformer
-                        ref={(node) => (transformerRefs.current[pageNumber] = node)}
-                        boundBoxFunc={(oldBox, newBox) => {
-                            if (newBox.width < 5 || newBox.height < 5) {
-                                return oldBox;
-                            }
-                            return newBox;
-                        }}
-                    />
+                    {highlightsByPage[pageNumber]?.map((highlight, i) => (
+                        <Rect
+                            key={`${pageNumber}-${i}`}
+                            id={`${pageNumber}-${i}`}
+                            x={highlight.x}
+                            y={highlight.y}
+                            width={highlight.width}
+                            height={highlight.height}
+                            stroke="black"
+                            strokeWidth={0.5}
+                            fill="yellow"
+                            opacity={0.4}
+                            onClick={handleHighlightClick}
+                            onDragStart={() => setIsDragging(true)} // Bắt đầu kéo
+                            onDragEnd={() => setIsDragging(false)} // Kết thúc kéo
+                        />
+                    ))}
                 </Layer>
-            )}
 
-        </Stage>
+                {selectedHighlightId && (
+                    <Layer>
+                        <Transformer
+                            ref={(node) => (transformerRefs.current[pageNumber] = node)}
+                            boundBoxFunc={(oldBox, newBox) => {
+                                if (newBox.width < 5 || newBox.height < 5) {
+                                    return oldBox;
+                                }
+                                return newBox;
+                            }}
+                        />
+                    </Layer>
+                )}
+
+            </Stage>}
+        </>
     );
 };
 

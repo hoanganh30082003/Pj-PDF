@@ -8,11 +8,11 @@ const RenderCircles = ({ pageNumber, pageSize }) => {
     const stageRefs = useRef({});
     const transformerRefs = useRef([]);
     let transformer = useRef();
-    const { isEditing, circlesByPage, setCirclesByPage } = useContext(PdfViewerContext);
+    const { isCircle, circlesByPage, setCirclesByPage } = useContext(PdfViewerContext);
     const { width, height } = pageSize;
 
     useEffect(() => {
-        if (selectedCircleId && isEditing) {
+        if (selectedCircleId && isCircle) {
             const pageNumber = parseInt(selectedCircleId.split('-')[0]);
             const stage = stageRefs.current[pageNumber];
             const shape = stage.findOne(`#${selectedCircleId}`);
@@ -32,7 +32,7 @@ const RenderCircles = ({ pageNumber, pageSize }) => {
                 }
             });
         }
-    }, [selectedCircleId, isEditing]);
+    }, [selectedCircleId, isCircle]);
     function addCircle(pageNumber, x, y, radius = 20) {
         setCirclesByPage(prevCircles => ({
             ...prevCircles,
@@ -44,12 +44,10 @@ const RenderCircles = ({ pageNumber, pageSize }) => {
     }
 
     function handleMouseDown(pageNumber, e) {
-        if (e.target === e.target.getStage() && isEditing) {
+        if (e.target === e.target.getStage() && isCircle) {
             const stage = e.target.getStage();
             const pointerPosition = stage.getPointerPosition();
             addCircle(pageNumber, pointerPosition.x, pointerPosition.y);
-        } else {
-            setIsDragging(true);
         }
     }
     function handleCircleClick(e) {
@@ -58,48 +56,48 @@ const RenderCircles = ({ pageNumber, pageSize }) => {
     }
 
     return (
-        <Stage
-            id={`stage_${pageNumber}`}
-            ref={(node) => (stageRefs.current[pageNumber] = node)}
-            width={width}
-            height={height}
-            onMouseDown={(e) => handleMouseDown(pageNumber, e)}
-            style={{ position: 'absolute', top: 0, left: 0, zIndex: isEditing ? 10 : 0 }}
-            isEditing={isEditing}
-        >
-            <Layer>
-                {circlesByPage[pageNumber]?.map((circle, i) => (
-                    <Circle
-                        key={`${pageNumber}-${i}`}
-                        id={`${pageNumber}-${i}`}
-                        x={circle.x}
-                        y={circle.y}
-                        radius={circle.radius}
-                        stroke="black"
-                        strokeWidth={0.5}
-                        draggable
-                        onClick={handleCircleClick}
-                        onDragStart={() => setIsDragging(true)} // Bắt đầu kéo
-                        onDragEnd={() => setIsDragging(false)} // Kết thúc kéo
-                    />
-                ))}
-            </Layer>
-
-            {selectedCircleId && (
+        <>
+            {isCircle && <Stage
+                id={`stage_${pageNumber}`}
+                ref={(node) => (stageRefs.current[pageNumber] = node)}
+                width={width}
+                height={height}
+                onMouseDown={(e) => handleMouseDown(pageNumber, e)}
+                style={{ position: 'absolute', top: 0, left: 0, zIndex: isCircle ? 10 : 0 }}
+                isCircle={isCircle}
+            >
                 <Layer>
-                    <Transformer
-                        ref={(node) => (transformerRefs.current[pageNumber] = node)}
-                        boundBoxFunc={(oldBox, newBox) => {
-                            if (newBox.width < 5 || newBox.height < 5) {
-                                return oldBox;
-                            }
-                            return newBox;
-                        }}
-                    />
+                    {circlesByPage[pageNumber]?.map((circle, i) => (
+                        <Circle
+                            key={`${pageNumber}-${i}`}
+                            id={`${pageNumber}-${i}`}
+                            x={circle.x}
+                            y={circle.y}
+                            radius={circle.radius}
+                            stroke="black"
+                            strokeWidth={0.5}
+                            onClick={handleCircleClick}
+                            draggable
+                        />
+                    ))}
                 </Layer>
-            )}
 
-        </Stage>
+                {selectedCircleId && (
+                    <Layer>
+                        <Transformer
+                            ref={(node) => (transformerRefs.current[pageNumber] = node)}
+                            boundBoxFunc={(oldBox, newBox) => {
+                                if (newBox.width < 5 || newBox.height < 5) {
+                                    return oldBox;
+                                }
+                                return newBox;
+                            }}
+                        />
+                    </Layer>
+                )}
+
+            </Stage>}
+        </>
     );
 }
 export default RenderCircles;

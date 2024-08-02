@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -7,15 +7,29 @@ import RenderCircles from './RenderCircles';
 import HighlightLayer from './RenderAreaHighlights';
 import * as pdfjsLib from 'pdfjs-dist'; // Import pdfjsLib
 import RenderTextHighlight from './RenderTextHighlight';
+import RenderUnderlineTexts from './RenderUnderlineTexts';
+import RenderStrikeTexts from './RenderStrikeTexts';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const MyPdfViewer = () => {
     const [pdfLoaded, setPdfLoaded] = useState(false);
     const pdfUrl = './WebviewerDemoDoc.pdf';
-    const { numPages, setNumPages, isEditing, setIsEditing, setCirclesByPage, highlightsByPage, setHighlightsByPage, isHighlighting, setIsHighlighting } = useContext(PdfViewerContext);
+    const { numPages,
+        setNumPages,
+        isCircle,
+        setIsCircle,
+        setCirclesByPage,
+        isHighlightArea,
+        setIsHighlightArea,
+        isUnderlineText,
+        setIsUnderlineText,
+        isHighlight,
+        setIsHighlight,
+        isStrikeOut,
+        setIsStrikeOut } = useContext(PdfViewerContext);
     const [pageSizes, setPageSizes] = useState({});
     const [words, setWords] = useState({});
-    console.log(words);
     const handleRenderSuccess = async (page) => {
         setPageSizes({ width: page.originalWidth, height: page.originalHeight });
         const words = await getWords(await page);
@@ -23,6 +37,7 @@ const MyPdfViewer = () => {
             ...prevWordsByPage,
             [page.pageNumber]: words,
         }));
+
     };
     function onDocumentLoadSuccess(pdf) {
         setNumPages(pdf.numPages);
@@ -57,10 +72,13 @@ const MyPdfViewer = () => {
     return (
         <div>
             <div style={{ backgroundColor: 'red', marginBottom: '10px' }}>
-                <button onClick={() => setIsEditing(!isEditing)}>
-                    {isEditing ? 'Tắt chế độ tròn' : 'Bật chế độ tròn'}
+                <button onClick={() => setIsCircle(!isCircle)}>
+                    {isCircle ? 'Tắt chế độ tròn' : 'Bật chế độ tròn'}
                 </button>
-                <button onClick={() => setIsHighlighting(!isHighlighting)}>{isHighlighting ? 'Tắt chế độ highlight' : 'Bật chế độ highlight'}</button>
+                <button onClick={() => setIsHighlightArea(!isHighlightArea)}>{isHighlightArea ? 'Tắt chế độ highlight area' : 'Bật chế độ highlight area'}</button>
+                <button onClick={() => setIsHighlight(!isHighlight)}>{isHighlight ? 'Tắt chế độ highlight text' : 'Bật chế độ highlight text'}</button>
+                <button onClick={() => setIsUnderlineText(!isUnderlineText)}>{isUnderlineText ? 'Tắt chế độ underline text' : 'Bật chế độ underline text'}</button>
+                <button onClick={() => setIsStrikeOut(!isStrikeOut)}>{isStrikeOut ? 'Tắt chế độ strikeout text' : 'Bật chế độ strikeout text'}</button>
             </div>
             <div
                 style={{
@@ -90,6 +108,8 @@ const MyPdfViewer = () => {
                                             <RenderCircles pageNumber={pageNumber} pageSize={pageSizes} />
                                             <HighlightLayer pageNumber={pageNumber} pageSize={pageSizes} />
                                             <RenderTextHighlight pageNumber={pageNumber} words={words[pageNumber]} pageSize={pageSizes} />
+                                            <RenderUnderlineTexts pageNumber={pageNumber} pageSize={pageSizes} words={words[pageNumber]} />
+                                            <RenderStrikeTexts pageNumber={pageNumber} pageSize={pageSizes} words={words[pageNumber]} />
                                         </>
                                     )}
                                 </div>

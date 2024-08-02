@@ -3,13 +3,35 @@ import React, { createContext, useState } from 'react';
 const PdfViewerContext = createContext();
 const PdfViewerProvider = ({ children }) => {
     const [numPages, setNumPages] = useState(0);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isCircle, setIsCircle] = useState(false);
     const [circlesByPage, setCirclesByPage] = useState({});
     const [highlightsByPage, setHighlightsByPage] = useState({});
-    const [isHighlighting, setIsHighlighting] = useState(false);
+    const [isHighlightArea, setIsHighlightArea] = useState(false);
+    const [isUnderlineText, setIsUnderlineText] = useState(false);
+    const [isHighlight, setIsHighlight] = useState(false);
+    const [isStrikeOut, setIsStrikeOut] = useState(false);
     return (
-        <PdfViewerContext.Provider value={{ numPages, setNumPages, isEditing, setIsEditing, circlesByPage, setCirclesByPage,highlightsByPage, setHighlightsByPage, isHighlighting, setIsHighlighting }}>
-            {children}
+        <PdfViewerContext.Provider
+            value={{
+                numPages,
+                setNumPages,
+                isCircle,
+                setIsCircle,
+                circlesByPage,
+                setCirclesByPage,
+                highlightsByPage,
+                setHighlightsByPage,
+                isHighlightArea,
+                setIsHighlightArea,
+                isUnderlineText,
+                setIsUnderlineText,
+                isHighlight,
+                setIsHighlight,
+                isStrikeOut,
+                setIsStrikeOut
+            }}
+        >
+        {children}
         </PdfViewerContext.Provider>
     );
 };
