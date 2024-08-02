@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Stage, Layer, Rect } from 'react-konva';
 import { PdfViewerContext } from './PdfViewerContext';
-const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
+const RenderStrikeTexts = ({ pageNumber, words, pageSize }) => {
     const [highlightsByPage, setHighlightsByPage] = useState({});
     const [newHighlight, setNewHighlight] = useState(null);
     const [highlights, setHighlights] = useState([]);
     const { width, height } = pageSize;
     const stageRefs = useRef({});
-    const { isHighlight } = useContext(PdfViewerContext);
+    const { isStrikeOut } = useContext(PdfViewerContext);
+
     useEffect(() => {
         const storedHighlights = localStorage.getItem(`highlights_${pageNumber}`);
         if (storedHighlights) {
@@ -32,7 +33,7 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
     }
 
     function handleMouseDown(pageNumber, e) {
-        if (e.target === e.target.getStage()) {
+        if ((e.target === e.target.getStage()) && isStrikeOut) {
             const stage = e.target.getStage();
             const pointerPosition = stage.getPointerPosition();
             setNewHighlight({
@@ -83,8 +84,8 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                         ...prevHighlights,
                         ...highlightedWords.map((word) => ({ ...word, pageNumber })),
                     ];
-                     localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights)); // off code dòng này highlight vẫn tạo ra gạch ngang văn bản
-                     return newHighlights;
+                    localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights));
+                    return newHighlights;
                 });
 
                 setHighlightsByPage((prev) => ({ ...prev, [pageNumber]: highlightedWords }));
@@ -104,7 +105,7 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
 
     return (
         <>
-            {isHighlight && <Stage
+            {isStrikeOut && <Stage
                 id={`stage_${pageNumber}`}
                 ref={(node) => (stageRefs.current[pageNumber] = node)}
                 width={width}
@@ -112,18 +113,20 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                 onMouseDown={(e) => handleMouseDown(pageNumber, e)}
                 onMouseUp={(e) => handleMouseUp(pageNumber, e)}
                 onMouseMove={(e) => handleMouseMove(pageNumber, e)}
-                style={{ position: 'absolute', top: 0, left: 0, zIndex: isHighlight ? 10 : 0 }}
+                style={{ position: 'absolute', top: 0, left: 0, zIndex: isStrikeOut ? 10 : 0 }}
+                isStrikeOut = {isStrikeOut}
             >
                 <Layer>
                     {highlights.map((word, i) => (
                         <Rect
                             key={i}
                             x={word.x}
-                            y={word.y - word.height}
+                            y={word.y - (word.height) / 3 + 1}
                             width={word.width}
-                            height={word.height + 2}
-                            fill="rgba(0,0,255,0.5)"
-
+                            height={0}
+                            stroke="blue"
+                            strokeWidth={0.5}
+                            fill="transparent"
                             onClick={() => handleWordClick(word)}
                         />
                     ))}
@@ -141,7 +144,8 @@ const RenderTextHighlight = ({ pageNumber, words, pageSize }) => {
                 </Layer>
             </Stage>}
         </>
+
     );
 };
 
-export default RenderTextHighlight;
+export default RenderStrikeTexts; 
