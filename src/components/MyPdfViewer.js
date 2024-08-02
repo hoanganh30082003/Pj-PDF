@@ -9,7 +9,6 @@ import * as pdfjsLib from 'pdfjs-dist'; // Import pdfjsLib
 import RenderTextHighlight from './RenderTextHighlight';
 import RenderUnderlineTexts from './RenderUnderlineTexts';
 import RenderStrikeTexts from './RenderStrikeTexts';
-
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const MyPdfViewer = () => {
@@ -125,5 +124,3 @@ const MyPdfViewer = () => {
 };
 
 export default MyPdfViewer;
-
-
