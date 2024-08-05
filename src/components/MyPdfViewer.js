@@ -11,6 +11,12 @@ import RenderUnderlineTexts from './RenderUnderlineTexts';
 import RenderStrikeTexts from './RenderStrikeTexts';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
+// thêm vào phía dưới để xử lý layout cho các nút button ở homepage
+import NavbarButton from './NavbarButton';
+
+
+// thêm vào phía trên để xử lý layout cho các nút button ở homepage
+
 const MyPdfViewer = () => {
     const [pdfLoaded, setPdfLoaded] = useState(false);
     const pdfUrl = './WebviewerDemoDoc.pdf';
@@ -70,15 +76,7 @@ const MyPdfViewer = () => {
     };
     return (
         <div>
-            <div style={{ backgroundColor: 'red', marginBottom: '10px' }}>
-                <button onClick={() => setIsCircle(!isCircle)}>
-                    {isCircle ? 'Tắt chế độ tròn' : 'Bật chế độ tròn'}
-                </button>
-                <button onClick={() => setIsHighlightArea(!isHighlightArea)}>{isHighlightArea ? 'Tắt chế độ highlight area' : 'Bật chế độ highlight area'}</button>
-                <button onClick={() => setIsHighlight(!isHighlight)}>{isHighlight ? 'Tắt chế độ highlight text' : 'Bật chế độ highlight text'}</button>
-                <button onClick={() => setIsUnderlineText(!isUnderlineText)}>{isUnderlineText ? 'Tắt chế độ underline text' : 'Bật chế độ underline text'}</button>
-                <button onClick={() => setIsStrikeOut(!isStrikeOut)}>{isStrikeOut ? 'Tắt chế độ strikeout text' : 'Bật chế độ strikeout text'}</button>
-            </div>
+            <NavbarButton />
             <div
                 style={{
                     display: 'flex',
@@ -109,6 +107,7 @@ const MyPdfViewer = () => {
                                             <RenderTextHighlight pageNumber={pageNumber} words={words[pageNumber]} pageSize={pageSizes} />
                                             <RenderUnderlineTexts pageNumber={pageNumber} pageSize={pageSizes} words={words[pageNumber]} />
                                             <RenderStrikeTexts pageNumber={pageNumber} pageSize={pageSizes} words={words[pageNumber]} />
+
                                         </>
                                     )}
                                 </div>

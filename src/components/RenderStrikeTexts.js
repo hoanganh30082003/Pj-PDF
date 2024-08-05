@@ -9,13 +9,6 @@ const RenderStrikeTexts = ({ pageNumber, words, pageSize }) => {
     const stageRefs = useRef({});
     const { isStrikeOut } = useContext(PdfViewerContext);
 
-    useEffect(() => {
-        const storedHighlights = localStorage.getItem(`highlights_${pageNumber}`);
-        if (storedHighlights) {
-            setHighlights(JSON.parse(storedHighlights));
-        }
-    }, [pageNumber]);
-
     function handleWordClick(word) {
         setHighlights((prevHighlights) => {
             if (
@@ -46,17 +39,17 @@ const RenderStrikeTexts = ({ pageNumber, words, pageSize }) => {
         }
     }
 
-    function handleMouseMove(pageNumber, e) {
-        if (newHighlight) {
-            const stage = e.target.getStage();
-            const pointerPosition = stage.getPointerPosition();
-            setNewHighlight({
-                ...newHighlight,
-                endX: pointerPosition.x,
-                endY: pointerPosition.y,
-            });
-        }
-    }
+    // function handleMouseMove(pageNumber, e) {
+    //     if (newHighlight) {
+    //         const stage = e.target.getStage();
+    //         const pointerPosition = stage.getPointerPosition();
+    //         setNewHighlight({
+    //             ...newHighlight,
+    //             endX: pointerPosition.x,
+    //             endY: pointerPosition.y,
+    //         });
+    //     }
+    // }
 
     function handleMouseUp(pageNumber, e) {
         if (newHighlight) {
@@ -84,7 +77,6 @@ const RenderStrikeTexts = ({ pageNumber, words, pageSize }) => {
                         ...prevHighlights,
                         ...highlightedWords.map((word) => ({ ...word, pageNumber })),
                     ];
-                    localStorage.setItem(`highlights_${pageNumber}`, JSON.stringify(newHighlights));
                     return newHighlights;
                 });
 
